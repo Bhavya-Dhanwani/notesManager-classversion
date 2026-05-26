@@ -62,4 +62,24 @@ app.post("/api/notes",async (req, res) => {
     });
 });
 
+/*
+@routeUsage: to get all the notes
+@routeType: GET because of just fetching and sending data back
+@dataAccepted No data accepted
+*/
+app.get("/api/notes", async (req, res) => {
+
+    // fetching data form the DB 
+    const notes = await notesModel.find();
+
+    // sending the response
+    return res.status(200).json({
+        success: true,
+        messgae: "Notes fetched Successfully",
+        data: {
+            notes
+        }
+    });
+});
+
 export default app;
