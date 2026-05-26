@@ -96,7 +96,7 @@ app.patch("/api/notes/:id", async (req, res) => {
     // Checking if notes exists
     const notes = notesModel.findById(id);
 
-    if(!notes) {
+    if (!notes) {
         res.status(409).json({
             messgae: "Note do not exists create one first"
         });
@@ -116,6 +116,25 @@ app.patch("/api/notes/:id", async (req, res) => {
         }
     });
 
-})
+});
+
+/*
+@routeUsage: to delete a note
+@routeType: DELETE because of deletion 
+@dataAccepted taking the id from params
+*/
+app.delete("/api/notes/:id", async (req, res) => {
+
+    // accepting data
+    let id = req.params.id;
+
+    // deleting it
+    await notesModel.findByIdAndDelete(id);
+
+    // sending the response
+    return res.status(204).json({
+        messgae: "Deleted the notes Successfully"
+    });
+});
 
 export default app;
