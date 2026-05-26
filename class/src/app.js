@@ -54,11 +54,33 @@ app.post("/api/notes", async (req, res) => {
     return res.status(201).json({
         success: true,
         message: "Notes created Successfully",
-        dataL: {
+        data: {
             notes
         }
     });
-})
+});
+
+
+/*
+@routeUsage: to get all the notes
+@routeType: GET because of just fetching and sending data back
+@dataAccepted No data accepted
+*/
+app.get("/api/notes", async (req, res) => {
+
+    // fetching all notes from the database
+    const notes = await noteModel.find();
+
+
+    // sending the notes in the response.
+    return res.status(200).json({
+        success: true,
+        messgae: "Notes fetched Successfully",
+        data: {
+            notes
+        }
+    })
+});
 
 
 export default app;
