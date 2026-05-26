@@ -57,5 +57,19 @@ app.post("/api/notes", async (req, res) => {
     });
 });
 
+app.get("/api/notes", async (req,res) => {
+
+    //getting data form Db 
+    const notes = await notesModel.find();
+
+    // sending the res
+    return res.status(200).json({
+        success: true,
+        message: 'Notes fethced Successfully',
+        data: {
+            notes
+        }
+    });
+})
 
 export default app;
