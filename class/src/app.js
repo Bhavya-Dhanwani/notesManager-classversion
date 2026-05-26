@@ -6,7 +6,7 @@ config();
 
 const app = express();
 await connectDB();
-
+app.use(express.json())
 
 /*
 @routeUsage: to crete a new note
@@ -80,6 +80,41 @@ app.get("/api/notes", async (req, res) => {
             notes
         }
     })
+});
+
+/*
+@routeUsage: to upate a note 
+@routeType: PATCH beacuse of updation
+@dataAccepted as raw json from the body and id accepted as params
+*/
+
+app.patch("/api/notes/:id", async (req, res) => {
+    // getting the data
+    let id = req.params.id;
+    let { title, description } = req.body;
+
+    // Checking if the note exists ?? 
+    const notes = await noteModel.findById(id)
+
+    if(!notes) {
+        res.status(409).json({
+            messgae: "Note not found Try again"
+        });
+    } 
+
+
+    // Updating the note
+    notes.title = title;
+    notes.description = description;
+    await notes.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Note updated successfully",
+        data: {
+            notes
+        }
+    });
 });
 
 
