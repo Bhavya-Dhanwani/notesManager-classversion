@@ -5,5 +5,5 @@ const noteSchema = await mongoose.Schema({
     description: String
 });
 
-const nodeModel = await mongoose.model("notes", noteSchema);
-export default nodeModel;
+const noteModel = await mongoose.model("notes", noteSchema);
+export default noteModel;
