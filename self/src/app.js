@@ -57,7 +57,12 @@ app.post("/api/notes", async (req, res) => {
     });
 });
 
-app.get("/api/notes", async (req,res) => {
+/*
+@routeUsage: to get all the notes
+@routeType: GET because of just fetching and sending data back
+@dataAccepted No data accepted
+*/
+app.get("/api/notes", async (req, res) => {
 
     //getting data form Db 
     const notes = await notesModel.find();
@@ -70,6 +75,41 @@ app.get("/api/notes", async (req,res) => {
             notes
         }
     });
+});
+
+/*
+@routeUsage: to upate a note 
+@routeType: PATCH beacuse of updation
+@dataAccepted as raw json from the body and id accepted as params
+*/
+app.patch("/api/notes/:id", async (req, res) => {
+
+    // accepting the data 
+    let id = req.params.id;
+    let { title, description } = req.body;
+
+    // Getting the notes and checking if esists.
+    const notes = notesModel.findById(id);
+
+    if(!notes) {
+        res.status(400).json({
+            messgae: "Note not found create it first"
+        });
+    }
+
+    // Updating the note
+    notes.title = title;
+    notes.description = description;
+    await notes.save();
+
+    // sending the response
+    res.status(200).json({
+        success: true,
+        message: "Note updated successfully",
+        data: {
+            notes
+        }
+    })
 })
 
 export default app;
