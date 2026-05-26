@@ -14,32 +14,32 @@ await connecDB();
 @routeType: POST because of creation
 @dataAccepted as raw json from the body
 */
-app.post("/api/notes",async (req, res) => {
+app.post("/api/notes", async (req, res) => {
 
     //accepting data 
     let { title, description } = req.body;
 
     // validations
 
-    if(!title) {
+    if (!title) {
         res.status(400).json({
             messgae: "Title is required"
         });
     }
 
-    if(!description) {
+    if (!description) {
         res.status(400).json({
             messgae: "Description is required"
         });
     }
 
-    if(title.trim().length < 4) {
+    if (title.trim().length < 4) {
         res.status(400).json({
             messgae: "Title must be atleat 4 characters long"
         });
     }
 
-    if(description.trim().length < 10) {
+    if (description.trim().length < 10) {
         res.status(400).json({
             messgae: "Desciption must be 10 characters long"
         });
@@ -81,5 +81,41 @@ app.get("/api/notes", async (req, res) => {
         }
     });
 });
+
+/*
+@routeUsage: to upate a note 
+@routeType: PATCH beacuse of updation
+@dataAccepted as raw json from the body and id accepted as params
+*/
+app.patch("/api/notes/:id", async (req, res) => {
+
+    //accepitng data
+    let id = req.params.id;
+    let { title, description } = req.body;
+
+    // Checking if notes exists
+    const notes = notesModel.findById(id);
+
+    if(!notes) {
+        res.status(409).json({
+            messgae: "Note do not exists create one first"
+        });
+    }
+
+    // updating
+    notes.title = title;
+    notes.description = description;
+    await notes.save();
+
+    // sending response 
+    return res.status(200).json({
+        success: true,
+        messgae: "Notes updated successfully",
+        data: {
+            notes
+        }
+    });
+
+})
 
 export default app;
